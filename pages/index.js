@@ -3,6 +3,7 @@ import React from 'react';
 import Cart from '../components/Cart';
 import ProductList from '../components/productList';
 import useStore from '../lib/store';
+import {useState} from "react"
 
 const products = [
   { id: 1, name: 'Python Word Guessing Game', price: 15, description: 'A fun game where the user has to guess a random word chosen by the computer. The game is written in Python and uses a list of words to choose from.' },
@@ -19,14 +20,44 @@ const products = [
   { id: 12, name: 'Raspberry Pi 4', price: 50, description: 'A small single-board computer from Raspberry Pi with a quad-core ARM Cortex-A72 CPU and up to 8GB of RAM. The computer is ideal for DIY projects and can run a variety of operating systems, including Linux and Windows 10.' }
 ]
 
+
+
+
+
 const IndexPage = () => {
+
+  const handleSearch = (event) => {
+    setSearchQuery(event.target.value);
+    const filtered = products.filter((product) =>
+      product.name.toLowerCase().includes(event.target.value.toLowerCase())
+    );
+    setDisplayProduct(filtered);
+  };
+
+  function SortByPrice(){
+    const sortedByPrice = products.slice().sort((a, b) => a.price - b.price);
+  setDisplayProduct(sortedByPrice)
+  }
+  
+  const sortByOrder = () => {
+    const sorted = products.slice().sort((a, b) => a.id - b.id);
+    setDisplayProduct(sorted);
+    
+  };
+
+  const [displayProduct, setDisplayProduct]= useState(products)
+  const [searchQuery, setSearchQuery] = useState('');
+
   const addToCart = useStore((state) => state.addToCart);
 
   return (
-    <div>
+    <div className="container">
       <h1>Next.js Shopping Cart</h1>
       <div className="row d-flex">
-      <ProductList products={products} addToCart={addToCart} />
+      <input type="text" value={searchQuery} onChange={handleSearch} placeholder="Search products..." />
+        <button onClick={SortByPrice}>Sort by price</button>
+        <button onClick={sortByOrder}>Sort by order</button>
+      <ProductList products={displayProduct} addToCart={addToCart} />
       </div>
      
       <Cart />

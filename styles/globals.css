@@ -19,6 +19,8 @@ a {
   border: 1px solid transparent;
   padding: 10px 20px;
   border-radius: 20px;
+  margin-left:10px;
+  margin-right:10px;
 }
 
 .card-item{
